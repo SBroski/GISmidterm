@@ -52,8 +52,8 @@
         const view = new MapView({
           container: "viewDiv", // Reference to the DOM node that will contain the view
           map: map, // References the map object
-          center: [-69.620314, 44.545968],
-          zoom: 13
+          center: [-98.5795, 39.8283], // Center of the U.S. (longitude, latitude)
+          zoom: 4 // Zoom level to show the entire U.S.
         });
 
         const searchWidget = new Search({
@@ -67,19 +67,32 @@
         const locateBtn = new Locate({
           view: view
         });
-
-        // Add the locate widget to the top left corner of the view
         view.ui.add(locateBtn, {
           position: "top-left"
         });
 
-        // Create feature layer from feature service Current USA Wildlfires layer from living atlas
-        const layer = new FeatureLayer({
-          // URL to the feature service
+        // Create feature layer for Current USA Wildfires
+        const wildfiresLayer = new FeatureLayer({
           url: "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/USA_Wildfires_v1/FeatureServer"
         });
 
-        map.add(layer);
+        // Create feature layer for MTBS Polygons
+        const mtbsLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/MTBS_Polygons_v1/FeatureServer"
+        });
+
+        // Create feature layer for NOAA Satellite Fire Detections
+        const noadetLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/C8EMgrsFcRFL6LrL/arcgis/rest/services/NOAA_Satellite_Fire_Detections_(v1)/FeatureServer"
+        });
+
+        //create feature layer for fire hazards with demographics
+        const firehazLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/USA_Wildfire_Hazard_Potential/FeatureServer"
+        });
+
+        // Add all layers to the map
+        map.addMany([wildfiresLayer, mtbsLayer, noadetLayer, firehazLayer]);
       });
     </script>
   </head>
